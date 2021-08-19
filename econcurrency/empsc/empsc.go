@@ -12,5 +12,7 @@ type Consumer func(v interface{}) (err error)
 
 type Channel interface {
 	eidiom.Closer
+
+	// Producer Create a new producer
 	Producer() Producer
 }
