@@ -1,8 +1,37 @@
 package euuid
 
 import (
+	"essentials/eformat/ehex"
+	"essentials/eidiom"
 	"fmt"
 	"regexp"
+)
+
+type Version int
+type Variant int
+
+const (
+	// Version1 Date-time and MAC address
+	Version1 Version = iota + 1
+
+	// Version2 Date-time and MAC address, DCE security version
+	Version2
+
+	// Version3 Namespace name-based (MD5)
+	Version3
+
+	// Version4 Random UUID
+	Version4
+
+	// Version5 Namespace name-based (SHA1)
+	Version5
+)
+
+const (
+	Variant0 Variant = iota
+	Variant1
+	Variant2
+	VariantReserved
 )
 
 type UUID interface {
@@ -10,6 +39,18 @@ type UUID interface {
 
 	// Urn returns URN form like `urn:uuid:123e4567-e89b-12d3-a456-426655440000`.
 	Urn() string
+
+	// Version of UUID
+	Version() Version
+
+	// Variant of UUID
+	Variant() Variant
+
+	// IsNil true if the UUID is zero
+	IsNil() bool
+
+	// Equals true if same value
+	Equals(x UUID) bool
 }
 
 const (
@@ -22,4 +63,19 @@ var (
 
 func IsUUID(uuid string) bool {
 	return uuidRe.MatchString(uuid)
+}
+
+func Parse(uuid string) (u UUID, err error) {
+	if !IsUUID(uuid) {
+		return nil, eidiom.ErrorParseInvalidFormat
+	}
+
+	// ----+----|----+----|----+----|----+-
+	// 123e4567-e89b-12d3-a456-426655440000
+	woh := uuid[0:8] + uuid[9:13] + uuid[14:18] + uuid[19:23] + uuid[24:36]
+	ud, err := ehex.Parse(woh)
+	if err != nil {
+		return nil, eidiom.ErrorParseInvalidFormat
+	}
+	return New(ud)
 }
