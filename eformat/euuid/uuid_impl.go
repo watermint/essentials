@@ -42,6 +42,9 @@ type uuidData struct {
 }
 
 func (z uuidData) Equals(x UUID) bool {
+	if x == nil {
+		return false
+	}
 	return z.String() == x.String()
 }
 
