@@ -11,7 +11,7 @@ func CurrentLocale() Locale {
 		return Default
 	}
 
-	lc, err := New(tag)
+	lc, err := Parse(tag)
 	if err != nil {
 		// fallback to Default language
 		return Default

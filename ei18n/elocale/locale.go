@@ -2,82 +2,121 @@ package elocale
 
 import (
 	"essentials/eidiom"
+	"essentials/estring/ecase"
 	"fmt"
 	"strings"
 )
 
-type Language string
-
 const (
-	TagEnglish  Language = "en"
-	TagJapanese Language = "ja"
+	TagEnglish  = "en"
+	TagJapanese = "ja"
 )
 
 var (
 	// Default fallback locale
-	Default  = English
-	English  = mustNew(string(TagEnglish))
-	Japanese = mustNew(string(TagJapanese))
+	Default  = mustParse(TagEnglish)
+	English  = mustParse(TagEnglish)
+	Japanese = mustParse(TagJapanese)
 )
 
-func mustNew(langTag string) Locale {
-	if lc, err := New(langTag); err != nil {
+// Locale represents a specific geopolitical region.
+type Locale interface {
+	// Stringer Language tag
+	fmt.Stringer
+
+	// Language ISO 639 code (2-3 letter code, always lower case)
+	Language() string
+
+	// LanguageTwoLetter ISO 639-1 Two-letter code (always lower case).
+	// Returns empty if the language is not defined in ISO 639-1.
+	LanguageTwoLetter() string
+
+	// LanguageExtended Extended language subtag
+	LanguageExtended() string
+
+	// Extension provide a mechanism for extending language tags for use in various applications.
+	Extension() string
+
+	// Script subtags are used to indicate the script or writing system
+	//   variations that distinguish the written forms of a language or its
+	//   dialects. ISO 15924.
+	//   First letter always upper case. Following letters are lower case like Xxxx (upper camel case).
+	Script() string
+
+	// Variant subtags are used to indicate additional, well-recognized
+	//   variations that define a language or its dialects that are not
+	//   covered by other available subtags.
+	Variant() string
+
+	// Region subtags are used to indicate linguistic variations associated
+	//   with or appropriate to a specific country, territory, or region.
+	//   Typically, a region subtag is used to indicate variations such as
+	//   regional dialects or usage, or region-specific spelling conventions.
+	//   ISO 3166 country code or UN M49 region code.
+	//   (always upper case).
+	Region() string
+
+	Data() LocaleData
+}
+
+type LocaleData struct {
+	// BCP 47 language tag
+	Tag           string `json:"tag"`
+	Lang          string `json:"lang"`
+	LangExtended  string `json:"lang_extended"`
+	Extension     string `json:"extension"`
+	Grandfathered string `json:"grandfathered"`
+	Region        string `json:"region"`
+	Script        string `json:"script"`
+	Variant       string `json:"variant"`
+	Private1      string `json:"private1"`
+	Private2      string `json:"private2"`
+	CodePage      string `json:"code_page"`
+}
+
+func mustParse(langTag string) Locale {
+	if lc, err := Parse(langTag); err != nil {
 		panic(err)
 	} else {
 		return lc
 	}
 }
 
-func New(langTag string) (local Locale, err error) {
-	matches := bcp47ReM.FindStringSubmatch(langTag)
+func Parse(langTag string) (local Locale, err error) {
+	lowerCaseLangTag := strings.ToLower(langTag)
+	if lowerCaseLangTag == "c" || lowerCaseLangTag == "posix" {
+		return mustParse(TagEnglish), nil
+	}
+
+	// accept tag like "ja_JP" as "ja-JP" (BCP 47 compliant)
+	if strings.Index(langTag, "_") >= 0 {
+		langTag = strings.ReplaceAll(langTag, "_", "-")
+	}
+
+	matches := bcp47Lang.FindStringSubmatch(langTag)
 	if len(matches) < 1 {
 		return nil, eidiom.ErrorParseInvalidFormat
 	}
 	language := strings.ToLower(matches[1])
-	if language == "c" {
-		return newLocale(string(TagEnglish)), nil
+
+	detail, match := bcp47Re.MatchSubExp(langTag)
+	if !match {
+		return nil, eidiom.ErrorParseInvalidFormat
 	}
-	return newLocale(language), nil
-}
 
-// Locale represents a specific geopolitical region.
-// Remarks: The immediate goal of this interface is to select a display language from
-// small number of supported languages (such as two languages like English & Japanese).
-// This interface will not consider region (ISO 3166 or UN M49), variants (BCP 47), scripts (ISO 15924), etc.
-type Locale interface {
-	// Stringer Language tag
-	fmt.Stringer
-
-	// Language ISO 639 code (2-3 letter code)
-	Language() Language
-
-	// LanguageTwoLetter ISO 639-1 Two-letter code.
-	// Returns empty if the language is not defined in 639-1.
-	LanguageTwoLetter() string
-}
-
-func newLocale(code string) Locale {
-	return &localeImpl{code: Language(code)}
-}
-
-type localeImpl struct {
-	code Language
-}
-
-func (z localeImpl) LanguageTwoLetter() string {
-	if len(z.code) == 2 {
-		return string(z.code)
+	data := LocaleData{
+		Tag:           langTag,
+		Lang:          language,
+		Extension:     detail["extension"],
+		LangExtended:  detail["extlang"],
+		Grandfathered: detail["grandfathered"],
+		Region:        strings.ToUpper(detail["region"]),
+		Script:        ecase.TokenToCamelCase(detail["script"]),
+		Variant:       detail["variant"],
+		Private1:      detail["privateUse"],
+		Private2:      detail["privateUse2"],
+		CodePage:      detail["codepage"],
 	}
-	if two, ok := iso631ThreeToTwoLetter[string(z.code)]; ok {
-		return two
-	}
-	return ""
-}
 
-func (z localeImpl) String() string {
-	return string(z.code)
-}
-
-func (z localeImpl) Language() Language {
-	return z.code
+	return &localeImpl{data: data}, nil
 }
