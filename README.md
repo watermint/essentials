@@ -5,9 +5,9 @@
 ## Goals
 
 * All native Go library.
-* Minimize `if err != nil` idiom. Compare to `nil` sometime cause unintended bugs.
 * Minimize use of external libraries.
 * Separate interface from implementation.
+* Safer code.
 * Ease of development.
 
 ## Core usecase

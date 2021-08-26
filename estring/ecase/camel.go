@@ -6,15 +6,17 @@ import (
 	"unicode"
 )
 
-// TokenToCamelCase changes token to camel case
-func TokenToCamelCase(s string) string {
-	switch len(s) {
+// TokenToCamelCase changes token to camel case. "token"/"TOKEN" to "Token".
+// This function expect the token consist of only alpha-numeric characters.
+// The function will not trim spaces or tokenize.
+func TokenToCamelCase(token string) string {
+	switch len(token) {
 	case 0:
 		return ""
 	case 1:
-		return strings.ToUpper(s)
+		return strings.ToUpper(token)
 	default:
-		runes := []rune(s)
+		runes := []rune(token)
 		runes[0] = unicode.ToUpper(runes[0])
 		for i := 1; i < len(runes); i++ {
 			runes[i] = unicode.ToLower(runes[i])
@@ -37,6 +39,7 @@ func ToUpperCamelCase(s string) string {
 	return strings.Join(output, "")
 }
 
+// ToLowerCamelCase change to lower camel case like from "Powered BY GO-lang" to "poweredByGoLang".
 func ToLowerCamelCase(s string) string {
 	input := etokenizer.AlphaNumCaseTokenizer().Tokens(s)
 	if len(input) < 1 {

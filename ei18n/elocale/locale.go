@@ -84,7 +84,9 @@ func mustParse(langTag string) Locale {
 
 func Parse(langTag string) (local Locale, err error) {
 	lowerCaseLangTag := strings.ToLower(langTag)
-	if lowerCaseLangTag == "c" || lowerCaseLangTag == "posix" {
+	if lowerCaseLangTag == "c" || lowerCaseLangTag == "posix" ||
+		strings.HasPrefix(lowerCaseLangTag, "c.") ||
+		strings.HasPrefix(lowerCaseLangTag, "posix.") {
 		return mustParse(TagEnglish), nil
 	}
 

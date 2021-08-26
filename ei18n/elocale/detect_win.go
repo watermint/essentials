@@ -4,26 +4,20 @@
 package elocale
 
 import (
-	"syscall"
-	"unsafe"
+	"essentials/enative/ewindows"
 )
 
 func currentLocaleWithSysCall(apiName string) (string, error) {
-	locNameBuf := make([]uint16, localeNameMaxLength)
-	k32, err := syscall.LoadDLL("kernel32")
-	if err != nil {
-		return "", err
+	locName := ewindows.NewBufferString(localeNameMaxLength)
+	r, _, lastErr, resolveErr := ewindows.Kernel32.Call(apiName, locName.Pointer(), locName.BufSize())
+	switch {
+	case resolveErr != nil:
+		return "", resolveErr
+	case r == 0:
+		return "", lastErr
+	default:
+		return locName.String(), nil
 	}
-	proc, err := k32.FindProc(apiName)
-	if err != nil {
-		return "", err
-	}
-
-	r, _, err := proc.Call(uintptr(unsafe.Pointer(&locNameBuf[0])), uintptr(localeNameMaxLength))
-	if r == 0 {
-		return "", err
-	}
-	return syscall.UTF16ToString(locNameBuf), nil
 }
 
 func currentLocaleString() (string, error) {
