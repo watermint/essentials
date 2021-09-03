@@ -4,32 +4,36 @@
 package elocale
 
 import (
+	"essentials/eidiom"
+	"essentials/eidiom/eoutcome"
 	"essentials/enative/ewindows"
 )
 
-func currentLocaleWithSysCall(apiName string) (string, error) {
+func currentLocaleWithSysCall(apiName string) (string, eidiom.Outcome) {
 	locName := ewindows.NewBufferString(localeNameMaxLength)
 	r, _, oc := ewindows.Kernel32.Call(apiName, locName.Pointer(), locName.BufSize())
 	switch {
 	case oc.HasError():
-		return "", oc.Cause()
+		return "", eoutcome.NewConfirmedError(oc.Cause())
 	case r == 0:
-		return "", oc.LastError()
+		return "", eoutcome.NewConfirmedError(oc.LastError())
 	default:
-		return locName.String(), nil
+		return locName.String(), eoutcome.NewConfirmedOk()
 	}
 }
 
 func currentLocaleString() (string, error) {
-	if ul, err := currentLocaleWithSysCall("GetUserDefaultLocaleName"); err != nil {
-		if sl, err := currentLocaleWithSysCall("GetSystemDefaultLocaleName"); err != nil {
-			return "", err
-		} else {
-			return sl, nil
-		}
-	} else {
+	ul, oc := currentLocaleWithSysCall("GetUserDefaultLocaleName")
+	if oc.IsOk() {
 		return ul, nil
 	}
+
+	sl, oc := currentLocaleWithSysCall("GetSystemDefaultLocaleName")
+	if oc.IsOk() {
+		return sl, nil
+	}
+
+	return "", oc.Cause()
 }
 
 const (

@@ -2,6 +2,18 @@ package eoutcome
 
 import "essentials/eidiom"
 
+func NewConfirmedOk() eidiom.Outcome {
+	return OutcomeBase{
+		Err: nil,
+	}
+}
+
+func NewConfirmedError(err error) eidiom.Outcome {
+	return OutcomeBase{
+		Err: err,
+	}
+}
+
 type OutcomeBase struct {
 	Err error
 }
