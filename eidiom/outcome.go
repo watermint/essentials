@@ -15,7 +15,7 @@ import "fmt"
 //
 // Consumer can handle errors like below.
 //
-//    f, out := eio.Create("/path/to/create")
+//    f, out := file.Create("/path/to/create")
 //    switch {
 //    case out.IsOk():
 //        // success
@@ -43,5 +43,23 @@ type Outcome interface {
 	IfError(f func() Outcome) Outcome
 
 	// Cause Return Outcome as an error instance if an operation got an error, otherwise returns nil.
+	Cause() error
+}
+
+// UnconfirmedOutcome is similar to Outcome, that replaces `error`. But UnconfirmedOutcome does not
+// include the operation's actual result. For example, when REST api client interface got a network error,
+// that is obviously error. However, if a REST API call result contains an error, the caller need to
+// verify response body or status code to determine the operation succeed or not.
+type UnconfirmedOutcome interface {
+	// HasError Returns true if an operation got at least one error.
+	HasError() bool
+
+	// IfError Perform f if an operation got at least one error, otherwise does nothing.
+	IfError(f func() UnconfirmedOutcome) UnconfirmedOutcome
+
+	// Cause Returns an error if UnconfirmedOutcome has as an obvious error (such as network error for REST call),
+	// otherwise returns nil.
+	// Inherited UnconfirmedOutcome interface should define a function like additional information like
+	// StatusCode(), LastErr(), etc.
 	Cause() error
 }

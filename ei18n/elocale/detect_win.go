@@ -9,12 +9,12 @@ import (
 
 func currentLocaleWithSysCall(apiName string) (string, error) {
 	locName := ewindows.NewBufferString(localeNameMaxLength)
-	r, _, lastErr, resolveErr := ewindows.Kernel32.Call(apiName, locName.Pointer(), locName.BufSize())
+	r, _, oc := ewindows.Kernel32.Call(apiName, locName.Pointer(), locName.BufSize())
 	switch {
-	case resolveErr != nil:
-		return "", resolveErr
+	case oc.HasError():
+		return "", oc.Cause()
 	case r == 0:
-		return "", lastErr
+		return "", oc.LastError()
 	default:
 		return locName.String(), nil
 	}
