@@ -1,7 +1,7 @@
 package eversion
 
 import (
-	"essentials/eidiom"
+	"essentials/eidiom/eoutcome"
 	"essentials/estring/eregexp"
 	"strconv"
 	"strings"
@@ -134,39 +134,39 @@ const (
 )
 
 func MustParse(v string) Version {
-	if x, err := Parse(v); err != nil {
-		panic(err)
+	if x, out := Parse(v); out.IsError() {
+		panic(out)
 	} else {
 		return x
 	}
 }
 
 // Parse version string as semantic versioning system MAJOR.MINOR.PATCH
-// Return 0.0.0 for version and an error (eidiom.ErrorParseInvalidFormat) if the invalid format.
-func Parse(v string) (version Version, err error) {
+// Return 0.0.0 for version and an error outcome if the invalid format.
+func Parse(v string) (version Version, outcome eoutcome.ParseOutcome) {
 	version = Zero()
 	matches, match := semanticRegex.MatchSubExp(v)
 	if !match {
-		return version, eidiom.ErrorParseInvalidFormat
+		return version, eoutcome.NewParseInvalidFormat("the given string does not match as semantic version format")
 	}
 
 	if v, err := strconv.ParseUint(matches[subexpNameMajor], 10, 64); err != nil {
-		return version, eidiom.ErrorParseInvalidFormat
+		return version, eoutcome.NewParseInvalidFormat("the major version does not comply version format")
 	} else {
 		version.Major = v
 	}
 	if v, err := strconv.ParseUint(matches[subexpNameMinor], 10, 64); err != nil {
-		return version, eidiom.ErrorParseInvalidFormat
+		return version, eoutcome.NewParseInvalidFormat("the minor version does not comply version format")
 	} else {
 		version.Minor = v
 	}
 	if v, err := strconv.ParseUint(matches[subexpNamePatch], 10, 64); err != nil {
-		return version, eidiom.ErrorParseInvalidFormat
+		return version, eoutcome.NewParseInvalidFormat("the patch version does not comply version format")
 	} else {
 		version.Patch = v
 	}
 	version.PreRelease = matches[subexpNamePreRelease]
 	version.Build = matches[subexpNameBuildMetadata]
 
-	return version, nil
+	return version, eoutcome.NewParseSuccess()
 }

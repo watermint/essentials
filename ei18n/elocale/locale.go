@@ -1,7 +1,7 @@
 package elocale
 
 import (
-	"essentials/eidiom"
+	"essentials/eidiom/eoutcome"
 	"essentials/estring/ecase"
 	"fmt"
 	"strings"
@@ -75,19 +75,19 @@ type LocaleData struct {
 }
 
 func mustParse(langTag string) Locale {
-	if lc, err := Parse(langTag); err != nil {
-		panic(err)
+	if lc, out := Parse(langTag); out.IsError() {
+		panic(out)
 	} else {
 		return lc
 	}
 }
 
-func Parse(langTag string) (local Locale, err error) {
+func Parse(langTag string) (local Locale, outcome eoutcome.ParseOutcome) {
 	lowerCaseLangTag := strings.ToLower(langTag)
 	if lowerCaseLangTag == "c" || lowerCaseLangTag == "posix" ||
 		strings.HasPrefix(lowerCaseLangTag, "c.") ||
 		strings.HasPrefix(lowerCaseLangTag, "posix.") {
-		return mustParse(TagEnglish), nil
+		return mustParse(TagEnglish), eoutcome.NewParseSuccess()
 	}
 
 	// accept tag like "ja_JP" as "ja-JP" (BCP 47 compliant)
@@ -97,13 +97,13 @@ func Parse(langTag string) (local Locale, err error) {
 
 	matches := bcp47Lang.FindStringSubmatch(langTag)
 	if len(matches) < 1 {
-		return nil, eidiom.ErrorParseInvalidFormat
+		return nil, eoutcome.NewParseInvalidFormat("the given lang-tag does not comply lang tag format")
 	}
 	language := strings.ToLower(matches[1])
 
 	detail, match := bcp47Re.MatchSubExp(langTag)
 	if !match {
-		return nil, eidiom.ErrorParseInvalidFormat
+		return nil, eoutcome.NewParseInvalidFormat("the given lang-tag does not comply lang tag format")
 	}
 
 	data := LocaleData{
@@ -120,5 +120,5 @@ func Parse(langTag string) (local Locale, err error) {
 		CodePage:      detail["codepage"],
 	}
 
-	return &localeImpl{data: data}, nil
+	return &localeImpl{data: data}, eoutcome.NewParseSuccess()
 }

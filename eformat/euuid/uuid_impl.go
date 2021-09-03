@@ -3,7 +3,7 @@ package euuid
 import (
 	"crypto/rand"
 	"essentials/eformat/ehex"
-	"essentials/eidiom"
+	"essentials/eidiom/eoutcome"
 )
 
 func NewV4() UUID {
@@ -28,13 +28,13 @@ func NewV4() UUID {
 	}
 }
 
-func New(data []byte) (UUID, error) {
+func New(data []byte) (UUID, eoutcome.ParseOutcome) {
 	if len(data) != 16 {
-		return nil, eidiom.ErrorParseInvalidFormat
+		return nil, eoutcome.NewParseInvalidFormat("UUID data length must be 16 bytes")
 	}
 	d := make([]byte, 16)
 	copy(d[:], data[:])
-	return uuidData{d}, nil
+	return uuidData{d}, eoutcome.NewParseSuccess()
 }
 
 type uuidData struct {

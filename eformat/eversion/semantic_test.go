@@ -3,26 +3,26 @@ package eversion
 import "testing"
 
 func TestParse(t *testing.T) {
-	if v, err := Parse("1.2.3"); err != nil {
-		t.Error(err)
+	if v, out := Parse("1.2.3"); out.IsError() {
+		t.Error(out)
 	} else if v.Major != 1 || v.Minor != 2 || v.Patch != 3 || v.PreRelease != "" || v.Build != "" {
 		t.Error(v)
 	}
 
-	if v, err := Parse("1.2.3-alpha"); err != nil {
-		t.Error(err)
+	if v, out := Parse("1.2.3-alpha"); out.IsError() {
+		t.Error(out)
 	} else if v.Major != 1 || v.Minor != 2 || v.Patch != 3 || v.PreRelease != "alpha" || v.Build != "" {
 		t.Error(v)
 	}
 
-	if v, err := Parse("1.2.3-beta+001"); err != nil {
-		t.Error(err)
+	if v, out := Parse("1.2.3-beta+001"); out.IsError() {
+		t.Error(out)
 	} else if v.Major != 1 || v.Minor != 2 || v.Patch != 3 || v.PreRelease != "beta" || v.Build != "001" {
 		t.Error(v)
 	}
 
 	// invalid format
-	if v, err := Parse("1-2-3-alpha"); err == nil {
+	if v, out := Parse("1-2-3-alpha"); out.IsOk() {
 		t.Error(v)
 	}
 }

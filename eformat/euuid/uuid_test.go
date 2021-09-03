@@ -1,7 +1,6 @@
 package euuid
 
 import (
-	"essentials/eidiom"
 	"testing"
 )
 
@@ -24,16 +23,16 @@ func TestIsUUID(t *testing.T) {
 func TestParse(t *testing.T) {
 	{
 		v := "00010203-0405-0607-0809-0a0b0c0d0e0f"
-		if x, err := Parse(v); x == nil || x.String() != v || err != nil {
-			t.Error(x, err)
+		if x, out := Parse(v); x == nil || x.String() != v || out.IsError() {
+			t.Error(x, out)
 		}
 	}
 
 	{
 		for i := 0; i < 10; i++ {
 			v := NewV4()
-			if x, err := Parse(v.String()); x == nil || x.String() != v.String() || err != nil {
-				t.Error(x, err)
+			if x, out := Parse(v.String()); x == nil || x.String() != v.String() || out.IsError() {
+				t.Error(x, out)
 			}
 		}
 	}
@@ -41,8 +40,8 @@ func TestParse(t *testing.T) {
 	// invalid format
 	{
 		v := "00010203-0405-06070809-0a0b0c0d0e0f"
-		if x, err := Parse(v); x != nil || err != eidiom.ErrorParseInvalidFormat {
-			t.Error(x, err)
+		if x, out := Parse(v); x != nil || !out.IsInvalidFormat() {
+			t.Error(x, out)
 		}
 	}
 }
@@ -66,9 +65,9 @@ func TestUuidData_IsNil(t *testing.T) {
 
 func TestUuidData_Equals(t *testing.T) {
 	uv4 := NewV4()
-	uv1, err := Parse("81451528-00e5-11ec-9a03-0242ac130003")
-	if err != nil {
-		t.Error(err)
+	uv1, out := Parse("81451528-00e5-11ec-9a03-0242ac130003")
+	if out.IsError() {
+		t.Error(out)
 		return
 	}
 
@@ -95,9 +94,9 @@ func TestUuidData_Version(t *testing.T) {
 	}
 
 	{
-		uv1, err := Parse("81451528-00e5-11ec-9a03-0242ac130003")
-		if err != nil {
-			t.Error(err)
+		uv1, out := Parse("81451528-00e5-11ec-9a03-0242ac130003")
+		if out.IsError() {
+			t.Error(out)
 		}
 		if x := uv1.Version(); x != Version1 {
 			t.Error(x)

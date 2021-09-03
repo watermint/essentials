@@ -2,7 +2,7 @@ package euuid
 
 import (
 	"essentials/eformat/ehex"
-	"essentials/eidiom"
+	"essentials/eidiom/eoutcome"
 	"fmt"
 	"regexp"
 )
@@ -65,17 +65,17 @@ func IsUUID(uuid string) bool {
 	return uuidRe.MatchString(uuid)
 }
 
-func Parse(uuid string) (u UUID, err error) {
+func Parse(uuid string) (u UUID, outcome eoutcome.ParseOutcome) {
 	if !IsUUID(uuid) {
-		return nil, eidiom.ErrorParseInvalidFormat
+		return nil, eoutcome.NewParseInvalidFormat("the given string does not conform UUID format")
 	}
 
 	// ----+----|----+----|----+----|----+-
 	// 123e4567-e89b-12d3-a456-426655440000
 	woh := uuid[0:8] + uuid[9:13] + uuid[14:18] + uuid[19:23] + uuid[24:36]
-	ud, err := ehex.Parse(woh)
-	if err != nil {
-		return nil, eidiom.ErrorParseInvalidFormat
+	ud, outcome := ehex.Parse(woh)
+	if outcome.IsError() {
+		return nil, outcome
 	}
 	return New(ud)
 }
