@@ -1,1 +1,1 @@
-module "essentials"
+module "github.com/watermint/essentials"

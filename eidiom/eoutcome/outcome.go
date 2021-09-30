@@ -1,6 +1,10 @@
 package eoutcome
 
-import "essentials/eidiom"
+import (
+	"errors"
+	"essentials/eidiom"
+	"fmt"
+)
 
 func NewConfirmedOk() eidiom.Outcome {
 	return OutcomeBase{
@@ -11,6 +15,12 @@ func NewConfirmedOk() eidiom.Outcome {
 func NewConfirmedError(err error) eidiom.Outcome {
 	return OutcomeBase{
 		Err: err,
+	}
+}
+
+func NewOutcomeBaseWithErrMessage(format string, v ...interface{}) OutcomeBase {
+	return OutcomeBase{
+		Err: errors.New(fmt.Sprintf(format, v...)),
 	}
 }
 
