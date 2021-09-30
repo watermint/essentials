@@ -1,7 +1,7 @@
 package efsunix
 
 import (
-	"essentials/efs"
+	"github.com/watermint/essentials/efs"
 )
 
 type Path interface {

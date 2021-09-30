@@ -1,6 +1,6 @@
 package empsc
 
-import "essentials/eidiom"
+import "github.com/watermint/essentials/eidiom"
 
 // Producer of Multi producer, single consumer
 type Producer interface {

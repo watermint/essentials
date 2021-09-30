@@ -1,6 +1,6 @@
 package efswin
 
-import "essentials/efs"
+import "github.com/watermint/essentials/efs"
 
 // Path for Windows
 // https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats

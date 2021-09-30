@@ -1,7 +1,7 @@
 package ehex
 
 import (
-	"essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 )
 
 func Parse(hex string) ([]byte, eoutcome.ParseOutcome) {

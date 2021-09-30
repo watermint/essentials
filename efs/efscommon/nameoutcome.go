@@ -1,8 +1,8 @@
 package efscommon
 
 import (
-	"essentials/efs"
-	"essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/efs"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 )
 
 const (

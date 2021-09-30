@@ -1,8 +1,8 @@
 package efs
 
 import (
-	"essentials/eidiom"
 	"fmt"
+	"github.com/watermint/essentials/eidiom"
 )
 
 // Path abstract absolute file path for various file systems.

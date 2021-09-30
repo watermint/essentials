@@ -1,8 +1,8 @@
 package ewindows
 
 import (
-	"essentials/eidiom"
-	"essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/eidiom"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 	"syscall"
 )
 

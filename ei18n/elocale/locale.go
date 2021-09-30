@@ -1,9 +1,9 @@
 package elocale
 
 import (
-	"essentials/eidiom/eoutcome"
-	"essentials/estring/ecase"
 	"fmt"
+	"github.com/watermint/essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/estring/ecase"
 	"strings"
 )
 

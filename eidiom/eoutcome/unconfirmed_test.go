@@ -2,7 +2,7 @@ package eoutcome
 
 import (
 	"errors"
-	"essentials/eidiom"
+	"github.com/watermint/essentials/eidiom"
 	"testing"
 )
 

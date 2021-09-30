@@ -2,9 +2,9 @@ package efscommon
 
 import (
 	"errors"
-	"essentials/efs"
-	"essentials/eidiom/eoutcome"
 	"fmt"
+	"github.com/watermint/essentials/efs"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 )
 
 const (

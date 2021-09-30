@@ -1,7 +1,7 @@
 package ecase
 
 import (
-	"essentials/estring/etokenizer"
+	"github.com/watermint/essentials/estring/etokenizer"
 	"strings"
 )
 

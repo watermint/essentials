@@ -2,8 +2,8 @@ package euuid
 
 import (
 	"crypto/rand"
-	"essentials/eformat/ehex"
-	"essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/eformat/ehex"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 )
 
 func NewV4() UUID {

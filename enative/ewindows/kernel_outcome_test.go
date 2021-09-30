@@ -2,7 +2,7 @@ package ewindows
 
 import (
 	"errors"
-	"essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 	"testing"
 )
 

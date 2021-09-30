@@ -1,6 +1,6 @@
 package efs
 
-import "essentials/eidiom"
+import "github.com/watermint/essentials/eidiom"
 
 type FolderOps interface {
 	ListEntries(f func(entry Entry) eidiom.Outcome) ListOutcome

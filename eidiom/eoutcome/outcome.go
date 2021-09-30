@@ -2,8 +2,8 @@ package eoutcome
 
 import (
 	"errors"
-	"essentials/eidiom"
 	"fmt"
+	"github.com/watermint/essentials/eidiom"
 )
 
 func NewConfirmedOk() eidiom.Outcome {

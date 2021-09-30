@@ -1,7 +1,7 @@
 package eoutcome
 
 import (
-	"essentials/eidiom"
+	"github.com/watermint/essentials/eidiom"
 )
 
 type UnconfirmedOutcomeBase struct {

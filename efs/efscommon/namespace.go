@@ -1,6 +1,6 @@
 package efscommon
 
-import "essentials/efs"
+import "github.com/watermint/essentials/efs"
 
 const (
 	nsIdentitySeparator = ":"
