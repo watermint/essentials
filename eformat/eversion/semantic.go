@@ -1,14 +1,10 @@
 package eversion
 
 import (
-	"errors"
+	"essentials/eidiom"
 	"essentials/estring/eregexp"
 	"strconv"
 	"strings"
-)
-
-var (
-	ErrorInvalidVersionFormat = errors.New("invalid version format")
 )
 
 // Compare x, y as semantic version number. The result will be 0 if x==y, -1 if x < y, and +1 if x > y.
@@ -146,26 +142,26 @@ func MustParse(v string) Version {
 }
 
 // Parse version string as semantic versioning system MAJOR.MINOR.PATCH
-// Return 0.0.0 for version and an error if the invalid format.
+// Return 0.0.0 for version and an error (eidiom.ErrorParseInvalidFormat) if the invalid format.
 func Parse(v string) (version Version, err error) {
 	version = Zero()
 	matches, match := semanticRegex.MatchSubExp(v)
 	if !match {
-		return version, ErrorInvalidVersionFormat
+		return version, eidiom.ErrorParseInvalidFormat
 	}
 
 	if v, err := strconv.ParseUint(matches[subexpNameMajor], 10, 64); err != nil {
-		return version, ErrorInvalidVersionFormat
+		return version, eidiom.ErrorParseInvalidFormat
 	} else {
 		version.Major = v
 	}
 	if v, err := strconv.ParseUint(matches[subexpNameMinor], 10, 64); err != nil {
-		return version, ErrorInvalidVersionFormat
+		return version, eidiom.ErrorParseInvalidFormat
 	} else {
 		version.Minor = v
 	}
 	if v, err := strconv.ParseUint(matches[subexpNamePatch], 10, 64); err != nil {
-		return version, ErrorInvalidVersionFormat
+		return version, eidiom.ErrorParseInvalidFormat
 	} else {
 		version.Patch = v
 	}
