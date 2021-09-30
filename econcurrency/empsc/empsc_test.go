@@ -1,7 +1,7 @@
 package empsc
 
 import (
-	"essentials/econcurrency/ethread"
+	"github.com/watermint/essentials/econcurrency/ethread"
 	"testing"
 )
 

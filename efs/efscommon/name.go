@@ -1,7 +1,7 @@
 package efscommon
 
 import (
-	"essentials/efs"
+	"github.com/watermint/essentials/efs"
 	"strings"
 )
 

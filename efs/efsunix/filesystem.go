@@ -1,8 +1,8 @@
 package efsunix
 
 import (
-	"essentials/efs"
-	"essentials/efs/efscommon"
+	"github.com/watermint/essentials/efs"
+	"github.com/watermint/essentials/efs/efscommon"
 )
 
 const (

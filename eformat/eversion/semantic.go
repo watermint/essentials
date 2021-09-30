@@ -1,8 +1,8 @@
 package eversion
 
 import (
-	"essentials/eidiom/eoutcome"
-	"essentials/estring/eregexp"
+	"github.com/watermint/essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/estring/eregexp"
 	"strconv"
 	"strings"
 )

@@ -1,6 +1,6 @@
 package efswin
 
-import "essentials/efs"
+import "github.com/watermint/essentials/efs"
 
 type Namespace interface {
 	efs.Namespace

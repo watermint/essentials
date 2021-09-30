@@ -1,7 +1,7 @@
 package elocale
 
 import (
-	"essentials/estring/eregexp"
+	"github.com/watermint/essentials/estring/eregexp"
 	"regexp"
 )
 

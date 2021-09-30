@@ -1,9 +1,9 @@
 package euuid
 
 import (
-	"essentials/eformat/ehex"
-	"essentials/eidiom/eoutcome"
 	"fmt"
+	"github.com/watermint/essentials/eformat/ehex"
+	"github.com/watermint/essentials/eidiom/eoutcome"
 	"regexp"
 )
 
