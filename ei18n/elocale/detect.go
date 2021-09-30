@@ -11,8 +11,8 @@ func CurrentLocale() Locale {
 		return Default
 	}
 
-	lc, err := Parse(tag)
-	if err != nil {
+	lc, out := Parse(tag)
+	if out.IsError() {
 		// fallback to Default language
 		return Default
 	}

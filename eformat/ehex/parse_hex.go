@@ -1,10 +1,12 @@
 package ehex
 
-import "essentials/eidiom"
+import (
+	"essentials/eidiom/eoutcome"
+)
 
-func Parse(hex string) ([]byte, error) {
+func Parse(hex string) ([]byte, eoutcome.ParseOutcome) {
 	if len(hex)%2 == 1 {
-		return nil, eidiom.ErrorParseInvalidFormat
+		return nil, eoutcome.NewParseInvalidFormat("hex string must have pair of digits")
 	}
 	hr := []rune(hex)
 	s := len(hr) / 2
@@ -14,11 +16,11 @@ func Parse(hex string) ([]byte, error) {
 		hi := parseSingleHex(hr[i*2])
 		lo := parseSingleHex(hr[i*2+1])
 		if hi > 0x10 || lo > 0x10 {
-			return nil, eidiom.ErrorParseInvalidFormat
+			return nil, eoutcome.NewParseInvalidChar("hex string must consists of [0-9a-fA-F]")
 		}
 		d[i] = hi<<4 | lo
 	}
-	return d, nil
+	return d, eoutcome.NewParseSuccess()
 }
 
 func parseSingleHex(hex rune) byte {
