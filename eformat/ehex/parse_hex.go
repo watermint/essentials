@@ -13,8 +13,8 @@ func Parse(hex string) ([]byte, eoutcome.ParseOutcome) {
 	d := make([]byte, s)
 
 	for i := 0; i < s; i++ {
-		hi := parseSingleHex(hr[i*2])
-		lo := parseSingleHex(hr[i*2+1])
+		hi := ParseSingleHex(hr[i*2])
+		lo := ParseSingleHex(hr[i*2+1])
 		if hi > 0x10 || lo > 0x10 {
 			return nil, eoutcome.NewParseInvalidChar("hex string must consists of [0-9a-fA-F]")
 		}
@@ -23,7 +23,7 @@ func Parse(hex string) ([]byte, eoutcome.ParseOutcome) {
 	return d, eoutcome.NewParseSuccess()
 }
 
-func parseSingleHex(hex rune) byte {
+func ParseSingleHex(hex rune) byte {
 	switch hex {
 	case '0', '０':
 		return 0x00

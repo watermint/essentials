@@ -5,7 +5,7 @@
 ## Goals
 
 * All native Go library.
-* Minimize use of external libraries.
+* Minimize use of external libraries (allowed packages: golang.org/x, github.com/golang).
 * Separate interface from implementation.
 * Safer code.
 * Ease of development.
