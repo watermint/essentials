@@ -6,13 +6,13 @@ import (
 	"github.com/watermint/essentials/eidiom"
 )
 
-func NewConfirmedOk() eidiom.Outcome {
+func NewOutcomeBaseOk() OutcomeBase {
 	return OutcomeBase{
 		Err: nil,
 	}
 }
 
-func NewConfirmedError(err error) eidiom.Outcome {
+func NewOutcomeBaseError(err error) OutcomeBase {
 	return OutcomeBase{
 		Err: err,
 	}

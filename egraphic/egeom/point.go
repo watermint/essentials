@@ -14,6 +14,8 @@ type Point interface {
 	Sub(x, y int) Point
 	SubPoint(q Point) Point
 
+	Equals(q Point) bool
+
 	Fixed26() fixed.Point26_6
 	Fixed52() fixed.Point52_12
 	ImagePoint() image.Point
@@ -50,6 +52,13 @@ func NewPointFixed52(q fixed.Point52_12) Point {
 
 type pointImpl struct {
 	x, y int
+}
+
+func (z pointImpl) Equals(q Point) bool {
+	if q == nil {
+		return false
+	}
+	return z.x == q.X() && z.y == q.Y()
 }
 
 func (z pointImpl) X() int {

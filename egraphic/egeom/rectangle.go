@@ -11,6 +11,8 @@ type Rectangle interface {
 	Width() int
 	Height() int
 
+	Equals(q Rectangle) bool
+
 	TopLeft() Point
 	TopCenter() Point
 	TopRight() Point
@@ -26,11 +28,11 @@ type Rectangle interface {
 	ImageRect() image.Rectangle
 }
 
-func NewRectangle(location Point, w, h int) Rectangle {
+func NewRectangle(location Point, width, height int) Rectangle {
 	return rectImpl{
 		location: location,
-		w:        w,
-		h:        h,
+		w:        width,
+		h:        height,
 	}
 }
 func NewRectangleImage(r image.Rectangle) Rectangle {
@@ -60,6 +62,13 @@ func NewRectangleFixed52(q fixed.Rectangle52_12) Rectangle {
 type rectImpl struct {
 	location Point
 	w, h     int
+}
+
+func (z rectImpl) Equals(q Rectangle) bool {
+	if q == nil {
+		return false
+	}
+	return z.location.Equals(q.TopLeft()) && z.w == q.Width() && z.h == q.Height()
 }
 
 func (z rectImpl) TopLeft() Point {

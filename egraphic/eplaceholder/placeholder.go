@@ -1,9 +1,9 @@
 package eplaceholder
 
 import (
+	"github.com/watermint/essentials/egraphic/ecolor"
+	"github.com/watermint/essentials/egraphic/egeom"
 	"github.com/watermint/essentials/eidiom"
-	"github.com/watermint/essentials/eimage/ecolor"
-	"github.com/watermint/essentials/eimage/egeom"
 	"image"
 	"image/draw"
 )

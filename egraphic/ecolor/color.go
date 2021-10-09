@@ -8,6 +8,11 @@ type Color interface {
 	Equals(other Color) bool
 }
 
+func NewColor(c color.Color) Color {
+	r, g, b, a := c.RGBA()
+	return NewRgba(uint8(r), uint8(g), uint8(b), uint8(a))
+}
+
 func NewRgb(r, g, b uint8) Color {
 	return NewRgba(r, g, b, 255)
 }
