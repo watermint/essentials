@@ -5,6 +5,7 @@ import (
 	"github.com/watermint/essentials/egraphic/egeom"
 	"github.com/watermint/essentials/egraphic/eimage"
 	"github.com/watermint/essentials/egraphic/etext"
+	"golang.org/x/image/font/gofont/gomedium"
 	"testing"
 )
 
@@ -17,7 +18,8 @@ func TestNewImageDrawer(t *testing.T) {
 	d := NewImageDrawer(img)
 	d.FillRectangle(img.Bounds(), fill)
 
-	s := etext.NewStyle(etext.GoFontMedium, textFill)
+	font := etext.MustNewTrueTypeParse(gomedium.TTF)
+	s := etext.NewStyle(font, textFill)
 	pos := egeom.PositionTopRight.Locate(img.Bounds(), s.Bound(text), egeom.NewPaddingFixed(20, 20))
 
 	d.DrawString(pos, text, s)
