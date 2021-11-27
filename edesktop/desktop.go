@@ -5,9 +5,8 @@ import (
 )
 
 type Desktop interface {
-	// Open Launches the associated application to open the file.
-	// Note: the parameter type will be replaced by efs.Path in the future.
-	Open(path string) OpenOutcome
+	// Open Launches the associated application to open a file or a URL
+	Open(p string) OpenOutcome
 }
 
 type OpenOutcome interface {

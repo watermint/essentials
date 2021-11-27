@@ -1,9 +1,5 @@
 package edesktop
 
-import (
-	"path/filepath"
-)
-
 func CurrentDesktop() Desktop {
 	return &desktopImpl{}
 }
@@ -11,7 +7,6 @@ func CurrentDesktop() Desktop {
 type desktopImpl struct {
 }
 
-func (z desktopImpl) Open(path string) OpenOutcome {
-	// desktopOpen expects local path in file system format
-	return desktopOpen(filepath.Clean(path))
+func (z desktopImpl) Open(p string) OpenOutcome {
+	return desktopOpen(p)
 }
