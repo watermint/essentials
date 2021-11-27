@@ -4,9 +4,9 @@
 package elocale
 
 import (
-	"essentials/eidiom"
-	"essentials/eidiom/eoutcome"
-	"essentials/enative/ewindows"
+	"github.com/watermint/essentials/eidiom"
+	"github.com/watermint/essentials/eidiom/eoutcome"
+	"github.com/watermint/essentials/enative/ewindows"
 )
 
 func currentLocaleWithSysCall(apiName string) (string, eidiom.Outcome) {
@@ -14,11 +14,11 @@ func currentLocaleWithSysCall(apiName string) (string, eidiom.Outcome) {
 	r, _, oc := ewindows.Kernel32.Call(apiName, locName.Pointer(), locName.BufSize())
 	switch {
 	case oc.HasError():
-		return "", eoutcome.NewConfirmedError(oc.Cause())
+		return "", eoutcome.NewOutcomeBaseError(oc.Cause())
 	case r == 0:
-		return "", eoutcome.NewConfirmedError(oc.LastError())
+		return "", eoutcome.NewOutcomeBaseError(oc.LastError())
 	default:
-		return locName.String(), eoutcome.NewConfirmedOk()
+		return locName.String(), eoutcome.NewOutcomeBaseOk()
 	}
 }
 
